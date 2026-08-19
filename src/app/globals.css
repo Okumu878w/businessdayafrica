@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1e2a4a;
+
+  /* Brand colors, matched from the original businessdayafrica.org screenshots */
+  --color-brand-red: #c8202f;       /* logo, category pills, accent banners */
+  --color-brand-red-dark: #a11824;  /* hover states */
+  --color-navy: #1e2a4a;            /* headlines, nav links, body headings */
+  --color-navy-light: #2f3d63;
+  --color-card-bg: #f0f0f0;         /* article card background */
+  --color-sidebar-dark: #1c1c2e;    /* Sections widget gradient header */
+
+  --font-playfair: "Playfair Display", Georgia, serif;
+  --font-poppins: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-red: var(--color-brand-red);
+  --color-brand-red-dark: var(--color-brand-red-dark);
+  --color-navy: var(--color-navy);
+  --color-navy-light: var(--color-navy-light);
+  --color-card-bg: var(--color-card-bg);
+  --color-sidebar-dark: var(--color-sidebar-dark);
+  --font-heading: var(--font-poppins);
+  --font-sans: var(--font-poppins);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-poppins);
+}
+
+/* Smooth back-to-top scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Line-clamp utilities for headline truncation on cards */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Migrated WordPress content sometimes has inline `style="width: 1200px"` on
+   <figure> wrappers, and fixed width/height attributes on <img> tags, which
+   break the article layout by forcing images wider than their container.
+   !important is needed here because inline styles otherwise take
+   precedence over normal CSS rules. */
+.prose figure {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.prose img {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 32rem;
+  object-fit: contain;
+  background-color: #f3f4f6;
+  border-radius: 0.75rem;
+}
+.prose figcaption {
+  font-size: 0.875rem;
+  color: #6b7280; /* gray-500 */
+  text-align: center;
+  margin-top: 0.5rem;
+}
