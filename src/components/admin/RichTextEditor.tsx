@@ -14,10 +14,12 @@ import {
   Heading2,
   LinkIcon,
   ImageIcon,
+  FolderOpen,
   Undo,
   Redo,
 } from "lucide-react";
 import { adminFetch } from "@/lib/adminApi";
+import MediaLibraryModal from "./MediaLibraryModal";
 
 interface Props {
   content: string;
@@ -27,6 +29,7 @@ interface Props {
 export default function RichTextEditor({ content, onChange }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -121,8 +124,11 @@ export default function RichTextEditor({ content, onChange }: Props) {
         >
           <LinkIcon size={17} />
         </ToolbarButton>
-        <ToolbarButton label="Insert image" onClick={() => fileInputRef.current?.click()}>
+        <ToolbarButton label="Upload image" onClick={() => fileInputRef.current?.click()}>
           <ImageIcon size={17} />
+        </ToolbarButton>
+        <ToolbarButton label="Insert from library" onClick={() => setLibraryOpen(true)}>
+          <FolderOpen size={17} />
         </ToolbarButton>
         <input
           ref={fileInputRef}
@@ -147,6 +153,15 @@ export default function RichTextEditor({ content, onChange }: Props) {
       {uploading && <p className="text-xs text-gray-500 px-4 pt-2">Uploading image...</p>}
 
       <EditorContent editor={editor} />
+
+      {libraryOpen && (
+        <MediaLibraryModal
+          onClose={() => setLibraryOpen(false)}
+          onSelect={(media) => {
+            editor.chain().focus().setImage({ src: media.url }).run();
+          }}
+        />
+      )}
     </div>
   );
 }

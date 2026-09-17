@@ -2,9 +2,10 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, X, FolderOpen } from "lucide-react";
 import { adminFetch } from "@/lib/adminApi";
 import { getImageUrl } from "@/lib/getImageUrl";
+import MediaLibraryModal from "./MediaLibraryModal";
 
 interface Props {
   mediaId: number | null;
@@ -16,6 +17,7 @@ export default function FeaturedImagePicker({ mediaId, imageUrl, onChange }: Pro
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   const previewUrl = getImageUrl(imageUrl);
 
@@ -54,15 +56,28 @@ export default function FeaturedImagePicker({ mediaId, imageUrl, onChange }: Pro
           </button>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          disabled={uploading}
-          className="w-full aspect-video rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-2 text-gray-400 hover:border-brand-red hover:text-brand-red transition-colors disabled:opacity-50"
-        >
-          <ImagePlus size={28} />
-          <span className="text-sm">{uploading ? "Uploading..." : "Click to upload"}</span>
-        </button>
+        <div className="w-full aspect-video rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-3 text-gray-400">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              disabled={uploading}
+              className="flex flex-col items-center gap-2 hover:text-brand-red transition-colors disabled:opacity-50"
+            >
+              <ImagePlus size={28} />
+              <span className="text-sm">{uploading ? "Uploading..." : "Upload new"}</span>
+            </button>
+            <div className="w-px h-10 bg-gray-300" />
+            <button
+              type="button"
+              onClick={() => setLibraryOpen(true)}
+              className="flex flex-col items-center gap-2 hover:text-brand-red transition-colors"
+            >
+              <FolderOpen size={28} />
+              <span className="text-sm">Choose existing</span>
+            </button>
+          </div>
+        </div>
       )}
 
       <input
@@ -77,6 +92,13 @@ export default function FeaturedImagePicker({ mediaId, imageUrl, onChange }: Pro
         }}
       />
       {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
+
+      {libraryOpen && (
+        <MediaLibraryModal
+          onClose={() => setLibraryOpen(false)}
+          onSelect={(media) => onChange(media.id, media.url)}
+        />
+      )}
     </div>
   );
 }
