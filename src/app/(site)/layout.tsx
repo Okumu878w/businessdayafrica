@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 // Self-hosted fonts (via @fontsource) rather than next/font/google — this
 // avoids any runtime/build-time dependency on Google's font CDN being
@@ -25,6 +26,8 @@ export const metadata: Metadata = {
     "Business Day Africa is an online publication that focuses on unbiased, balanced and factual news around the continent.",
 };
 
+const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -36,6 +39,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {ADSENSE_CLIENT_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
+      </head>
       <body className="antialiased flex min-h-screen flex-col">
         <Header categories={categories} />
         <main className="flex-1">{children}</main>

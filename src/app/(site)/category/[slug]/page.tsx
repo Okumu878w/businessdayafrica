@@ -3,6 +3,7 @@ import { getPosts, getCategories } from "@/lib/api";
 import CategoryBanner from "@/components/CategoryBanner";
 import ArticleCard from "@/components/ArticleCard";
 import PageSidebar from "@/components/PageSidebar";
+import AdUnit from "@/components/AdUnit";
 
 export const revalidate = 60;
 
@@ -33,6 +34,10 @@ export default async function CategoryPage({
     getPosts({ limit: 5 }),
   ]);
 
+  // Insert one in-feed ad after every 6 cards (one every 3 rows at the
+  // 2-column breakpoint). Adjust the modulo to taste.
+  const ADS_EVERY = 6;
+
   return (
     <div>
       <CategoryBanner title={category.name} />
@@ -41,8 +46,20 @@ export default async function CategoryPage({
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {posts.map((post) => (
-                <ArticleCard key={post.id} post={post} />
+              {posts.map((post, i) => (
+                <>
+                  <ArticleCard key={post.id} post={post} />
+                  {(i + 1) % ADS_EVERY === 0 && i !== posts.length - 1 && (
+                    <div key={`ad-${post.id}`} className="col-span-full">
+                      <AdUnit
+  slot="8787161782"
+  format="fluid"
+  layoutKey="-6t+ed+2i-1n-4w"
+  minHeight={280}
+/>
+                    </div>
+                  )}
+                </>
               ))}
               {posts.length === 0 && (
                 <p className="text-gray-500 col-span-full text-center py-10">
@@ -71,6 +88,9 @@ export default async function CategoryPage({
 
           <div className="lg:col-span-1">
             <PageSidebar categories={categories} latestPosts={latestPosts} />
+            <div className="mt-8 sticky top-24">
+              <AdUnit slot="1767206295" format="auto" minHeight={600} />
+            </div>
           </div>
         </div>
       </div>

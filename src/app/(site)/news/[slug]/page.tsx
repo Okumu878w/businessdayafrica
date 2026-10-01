@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getPostBySlug, getPosts, getCategories } from "@/lib/api";
 import { formatDateOrdinal } from "@/components/ArticleCard";
 import PageSidebar from "@/components/PageSidebar";
+import AdUnit from "@/components/AdUnit";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { fixContentImageUrls } from "@/lib/fixContentImageUrls";
 
@@ -84,6 +85,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </div>
           )}
 
+          <div className="mb-8">
+            <AdUnit
+  slot="6436330612"
+  format="fluid"
+  layout="in-article"
+  textAlignCenter
+  minHeight={250}
+/>
+          </div>
+
           {/* Content is trusted HTML authored by logged-in writers through
               the admin panel's rich text editor — not arbitrary user input.
               Image src attributes are rewritten to absolute backend URLs
@@ -92,6 +103,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-navy prose-a:text-brand-red"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
+
+          <div className="my-8">
+            <AdUnit
+  slot="6436330612"
+  format="fluid"
+  layout="in-article"
+  textAlignCenter
+  minHeight={250}
+/>
+          </div>
 
           {post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-10 pt-6 border-t border-gray-100">
@@ -124,6 +145,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         <div className="lg:col-span-1">
           <PageSidebar categories={categories} latestPosts={latestPosts.filter((p) => p.slug !== post.slug)} />
+          <div className="mt-8 sticky top-24">
+            <AdUnit slot="1767206295" format="auto" minHeight={600} />
+          </div>
         </div>
       </div>
     </div>
